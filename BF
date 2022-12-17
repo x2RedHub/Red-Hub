@@ -1,7 +1,7 @@
 --- Red Hub:BloxFruit Beta
 _G.Fast_Attack  = true
 _G.Select_Bring_Mob_Mode = "Super Bring Mob"
-_G.Select_Distance =  "50"
+_G.Select_Distance =  "45"
 
 if not game:IsLoaded() then 
     repeat game.Loaded:Wait()
@@ -9853,6 +9853,34 @@ end)
 	end)
 
 	CakePrinceSection:AddToggle({
+		Name = "Auto Spawn Cake Prince",
+		Value = _G.Settings.Auto_Spawn_Cake_Prince,
+		Callback = function(value)
+			_G.Auto_Spawn_Cake_Prince = value    
+			_G.Settings.Auto_Spawn_Cake_Prince = value
+			saveSettings()
+		end
+	})
+
+	spawn(function()
+		while wait() do
+			if _G.Auto_Spawn_Cake_Prince then
+				local args = {
+					[1] = "CakePrinceSpawner",
+					[2] = true
+				}
+
+				game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer(unpack(args))                    
+				local args = {
+					[1] = "CakePrinceSpawner"
+				}
+
+				game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer(unpack(args))
+			end
+		end
+	end)
+
+	CakePrinceSection:AddToggle({
 		Name = "Auto Cake Prince",
 		Value = _G.Settings.Auto_Cake_Prince,
 		Callback = function(value)
@@ -9925,34 +9953,6 @@ end)
 						end
 					end
 				end)
-			end
-		end
-	end)
-
-	CakePrinceSection:AddToggle({
-		Name = "Auto Spawn Cake Prince",
-		Value = _G.Settings.Auto_Spawn_Cake_Prince,
-		Callback = function(value)
-			_G.Auto_Spawn_Cake_Prince = value    
-			_G.Settings.Auto_Spawn_Cake_Prince = value
-			saveSettings()
-		end
-	})
-
-	spawn(function()
-		while wait() do
-			if _G.Auto_Spawn_Cake_Prince then
-				local args = {
-					[1] = "CakePrinceSpawner",
-					[2] = true
-				}
-
-				game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer(unpack(args))                    
-				local args = {
-					[1] = "CakePrinceSpawner"
-				}
-
-				game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer(unpack(args))
 			end
 		end
 	end)
