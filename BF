@@ -1,7 +1,7 @@
 --- Red Hub:BloxFruit Beta
 _G.Fast_Attack  = true
 _G.Select_Bring_Mob_Mode = "Super Bring Mob"
-_G.Select_Distance =  "40"
+_G.Select_Distance =  "50"
 
 if not game:IsLoaded() then 
     repeat game.Loaded:Wait()
@@ -12,7 +12,7 @@ wait(1)
 
 game.StarterGui:SetCore("SendNotification", {
 	Icon = "rbxassetid://11820806063";
-	Title = "Red Hub", 
+	Title = "Red Hub [Beta]", 
 	Text = "Whilelist"
 })
 
@@ -1583,7 +1583,7 @@ end)
 
 local library = {
 	Version = "0.35",
-	WorkspaceName = "Red Hub Premium Scripts [Beta]",
+	WorkspaceName = "Red Hub Premium Scripts",
 	flags = {},
 	signals = {},
 	objects = {},
@@ -8632,7 +8632,7 @@ library.W = library.CreateWindow
 local Wait = library.subs.Wait
 
 local BF = library:CreateWindow({
-Name = "Red Hub Premium",
+Name = "Red Hub Premium [Beta]",
 Themeable = {
     Info = "Discord:discord.gg/tNuUmH9g42"
    }
@@ -9186,6 +9186,7 @@ BossSection:AddDropdown({
 	Value = _G.Settings.Select_Boss,
     Callback = function(value)
         _G.Select_Boss = value
+		_G.Settings.Select_Boss = Value
     end
 })
 
@@ -9839,43 +9840,15 @@ end)
 		while wait() do
 			pcall(function()
 				if string.len(game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("CakePrinceSpawner")) == 88 then
-					Mob_Kill_Cake_Prince:Set("Kill : "..string.sub(game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("CakePrinceSpawner"),39,41).." : More!!!")
+					Mob_Kill_Cake_Prince:Set("Kill : "..string.sub(game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("CakePrinceSpawner"),39,41).." : More")
 				elseif string.len(game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("CakePrinceSpawner")) == 87 then
-					Mob_Kill_Cake_Prince:Set("Kill : "..string.sub(game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("CakePrinceSpawner"),39,40).." : More!!!")
+					Mob_Kill_Cake_Prince:Set("Kill : "..string.sub(game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("CakePrinceSpawner"),39,40).." : More")
 				elseif string.len(game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("CakePrinceSpawner")) == 86 then
-					Mob_Kill_Cake_Prince:Set("Kill : "..string.sub(game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("CakePrinceSpawner"),39,39).." : More!!!")
+					Mob_Kill_Cake_Prince:Set("Kill : "..string.sub(game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("CakePrinceSpawner"),39,39).." : More")
 				else
-					Mob_Kill_Cake_Prince:Set("Boss Is Spawned!!!")
+					Mob_Kill_Cake_Prince:Set("Boss Is Spawned")
 				end
 			end)
-		end
-	end)
-
-	CakePrinceSection:AddToggle({
-		Name = "Auto Spawn Cake Prince",
-		Value = _G.Settings.Auto_Spawn_Cake_Prince,
-		Callback = function(value)
-			_G.Auto_Spawn_Cake_Prince = value    
-			_G.Settings.Auto_Spawn_Cake_Prince = value
-			saveSettings()
-		end
-	})
-
-	spawn(function()
-		while wait() do
-			if _G.Auto_Spawn_Cake_Prince then
-				local args = {
-					[1] = "CakePrinceSpawner",
-					[2] = true
-				}
-
-				game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer(unpack(args))                    
-				local args = {
-					[1] = "CakePrinceSpawner"
-				}
-
-				game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer(unpack(args))
-			end
 		end
 	end)
 
@@ -9956,6 +9929,34 @@ end)
 		end
 	end)
 
+	CakePrinceSection:AddToggle({
+		Name = "Auto Spawn Cake Prince",
+		Value = _G.Settings.Auto_Spawn_Cake_Prince,
+		Callback = function(value)
+			_G.Auto_Spawn_Cake_Prince = value    
+			_G.Settings.Auto_Spawn_Cake_Prince = value
+			saveSettings()
+		end
+	})
+
+	spawn(function()
+		while wait() do
+			if _G.Auto_Spawn_Cake_Prince then
+				local args = {
+					[1] = "CakePrinceSpawner",
+					[2] = true
+				}
+
+				game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer(unpack(args))                    
+				local args = {
+					[1] = "CakePrinceSpawner"
+				}
+
+				game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer(unpack(args))
+			end
+		end
+	end)
+
 --- ElitehunterSection ---
 
 	local ElitehunterSection = General:CreateSection({
@@ -9971,9 +9972,9 @@ end)
 		while wait() do
 			pcall(function()
 				if game:GetService("ReplicatedStorage"):FindFirstChild("Diablo [Lv. 1750]") or game:GetService("ReplicatedStorage"):FindFirstChild("Deandre [Lv. 1750]") or game:GetService("ReplicatedStorage"):FindFirstChild("Urban [Lv. 1750]") or game:GetService("Workspace").Enemies:FindFirstChild("Diablo [Lv. 1750]") or game:GetService("Workspace").Enemies:FindFirstChild("Deandre [Lv. 1750]") or game:GetService("Workspace").Enemies:FindFirstChild("Urban [Lv. 1750]") then
-					Elite_Hunter_Status:Set("Status : Spawned!!!")	
+					Elite_Hunter_Status:Set("Status : Spawned")	
 				else
-					Elite_Hunter_Status:Set("Status : Not Spawn!!!")	
+					Elite_Hunter_Status:Set("Status : Not Spawn")	
 				end
 			end)
 		end
