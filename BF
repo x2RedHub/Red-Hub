@@ -1,7 +1,7 @@
 --- Red Hub:BloxFruit Beta
 _G.Fast_Attack  = true
 _G.Select_Bring_Mob_Mode = "Super Bring Mob"
-_G.Select_Distance =  "45"
+_G.Select_Distance =  "43"
 
 if not game:IsLoaded() then 
     repeat game.Loaded:Wait()
@@ -9187,6 +9187,7 @@ BossSection:AddDropdown({
     Callback = function(value)
         _G.Select_Boss = value
 		_G.Settings.Select_Boss = Value
+		saveSettings()
     end
 })
 
@@ -9853,34 +9854,6 @@ end)
 	end)
 
 	CakePrinceSection:AddToggle({
-		Name = "Auto Spawn Cake Prince",
-		Value = _G.Settings.Auto_Spawn_Cake_Prince,
-		Callback = function(value)
-			_G.Auto_Spawn_Cake_Prince = value    
-			_G.Settings.Auto_Spawn_Cake_Prince = value
-			saveSettings()
-		end
-	})
-
-	spawn(function()
-		while wait() do
-			if _G.Auto_Spawn_Cake_Prince then
-				local args = {
-					[1] = "CakePrinceSpawner",
-					[2] = true
-				}
-
-				game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer(unpack(args))                    
-				local args = {
-					[1] = "CakePrinceSpawner"
-				}
-
-				game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer(unpack(args))
-			end
-		end
-	end)
-
-	CakePrinceSection:AddToggle({
 		Name = "Auto Cake Prince",
 		Value = _G.Settings.Auto_Cake_Prince,
 		Callback = function(value)
@@ -9953,6 +9926,34 @@ end)
 						end
 					end
 				end)
+			end
+		end
+	end)
+
+	CakePrinceSection:AddToggle({
+		Name = "Auto Spawn Cake Prince",
+		Value = _G.Settings.Auto_Spawn_Cake_Prince,
+		Callback = function(value)
+			_G.Auto_Spawn_Cake_Prince = value    
+			_G.Settings.Auto_Spawn_Cake_Prince = value
+			saveSettings()
+		end
+	})
+
+	spawn(function()
+		while wait() do
+			if _G.Auto_Spawn_Cake_Prince then
+				local args = {
+					[1] = "CakePrinceSpawner",
+					[2] = true
+				}
+
+				game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer(unpack(args))                    
+				local args = {
+					[1] = "CakePrinceSpawner"
+				}
+
+				game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer(unpack(args))
 			end
 		end
 	end)
@@ -11923,37 +11924,22 @@ local SettingsSection = General:CreateSection({
 }) 
 
 Code = {
-	"EXP_5B",
-	"CONTROL",
-	"UPDATE11",
-	"XMASEXP",
-	"1BILLION",
-	"ShutDownFix2",
-	"UPD14",
-	"STRAWHATMAINE",
-	"TantaiGaming",
-	"Colosseum",
-	"Axiore",
-	"Sub2Daigrock",
-	"Sky Island 3",
-	"Sub2OfficialNoobie",
-	"SUB2NOOBMASTER123",
-	"THEGREATACE",
-	"Fountain City",
-	"BIGNEWS",
-	"FUDD10",
-	"SUB2GAMERROBOT_EXP1",
-	"UPD15",
-	"2BILLION",
-	"UPD16",
-	"3BVISITS",
-	"fudd10_v2",
-	"Starcodeheo",
+	"ADMINGIVEAWAY",
+	"GAMERROBOT_YT",
+	"Sub2Fer999",
+	"Enyu_is_Pro",
 	"Magicbus",
 	"JCWK",
+	"Starcodeheo",
 	"Bluxxy",
-	"Sub2Fer999",
-	"Enyu_is_Pro"
+	"SUB2GAMERROBOT_EXP1",
+	"Sub2NoobMaster123",
+	"Sub2Daigrock",
+	"Axiore",
+	"TantaiGaming",
+	"StrawHatMaine",
+	"Sub2OfficialNoobie",
+	"TheGreatAce",
 }
 
 SettingsSection:AddSlider({
@@ -11966,7 +11952,6 @@ SettingsSection:AddSlider({
 		_G.Select_Level_to_Redeem_All_Code = value
 		_G.Settings.Select_Level_to_Redeem_All_Code = value
 		saveSettings()
-		return "Redeem All Code At Level : " .. tostring(value)
     end
 })
 
@@ -12099,20 +12084,22 @@ StatsSection:AddToggle({
     Name = "Melee",
 	Value = _G.Melee,
     Callback = function(value)
-        _G.melee= value
+        _G.Melee= value
 		_G.Settings.Auto_Stats_Melee = value
         saveSettings()
     end
 })
+
 StatsSection:AddToggle({
     Name = "Defense",
 	Value = _G.Defense,
     Callback = function(value)
-        _G.defense = value
+        _G.Defense = value
 		_G.Settings.Auto_Stats_Melee = value
         saveSettings()
     end
 })
+
 StatsSection:AddToggle({
     Name = "Sword",
 	Value = _G.sword,
@@ -12122,6 +12109,7 @@ StatsSection:AddToggle({
         saveSettings()
     end
 })
+
 StatsSection:AddToggle({
     Name = "Gun",
 	Value = _G.gun,
@@ -12131,6 +12119,7 @@ StatsSection:AddToggle({
         saveSettings()
     end
 })
+
 StatsSection:AddToggle({
     Name = "Demon Fruit",
 	Value = _G.demonfruit,
@@ -12140,6 +12129,7 @@ StatsSection:AddToggle({
         saveSettings()
     end
 })
+
 StatsSection:AddSlider({
 	Name = "Select Point",
 	Value = 1,
@@ -12150,6 +12140,7 @@ StatsSection:AddSlider({
 		PointStats = value
 	end
 })
+
 spawn(function()
 	while wait() do
 		if game.Players.localPlayer.Data.Points.Value >= PointStats then
@@ -12690,11 +12681,12 @@ end
 ItemList = {"Mansion","cvxv"}
 IslandSection:AddDropdown({
 	Name = "Select Island",
-	Value = "nil",
+	Value = _G.Settings.Select_Island,
 	List = Island,
 	Callback = function(value)
 		_G.Select_Island = value
 		_G.Settings.Select_Island = value
+		saveSettings()
 	end
 })
 IslandSection:AddToggle({
