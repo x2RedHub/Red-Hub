@@ -1,7 +1,9 @@
---- Red Hub:BloxFruit Beta
+--- Red Hub:BloxFruit [Beta]
 
 _G.Bring_Mob = true
 _G.Select_Distance =  "40"
+
+if not game:IsLoaded() then repeat game.Loaded:Wait() until game:IsLoaded() end
 
 game.StarterGui:SetCore("SendNotification", {
 	Icon = "rbxassetid://11820806063";
@@ -49,9 +51,10 @@ _G.Settings = {
     Select_Mode_Farm = "Normal Mode";
     Fast_Attack = true;
 	Auto_Set_Spawn = true;
+	Select_Level_to_Redeem_All_Code = "1";
 	Select_Level_to_Redeem_All_Code = 1;
 	Auto_Redeem_All_Code = false;
-    Select_Weapon = nil;
+    Select_Weapon = "";
 	Fruit_Mastery = false;
 	Gun_Mastery = false;
 	Skill_Z = true;
@@ -124,12 +127,12 @@ _G.Settings = {
 	Infinit_Range_Observation_Haki = false;
 	Select_Size_Fov = 200;
 	Enabled_Fov = false;
-	Select_Player = nil;
+	Select_Player = "";
 	Spectate_Player = false;
 	Teleport_to_Player = false;
 	Select_Island = "";
 	Start_Tween_Island = false;
-	Select_Dungeon = nil;
+	Select_Dungeon = "";
 	Auto_Buy_Chips_Dungeon = false;
 	Auto_Start_Dungeon = false;
 	Auto_Next_Island = false;
@@ -10971,80 +10974,10 @@ local OtherSection = General:CreateSection({
 	Side = "Left"
 })
 
-	OtherSection:AddToggle{
-		Name = "Auto Farm Fish Tail",
-		Value = _G.Settings.Auto_Farm_Fish_Tail,
-		Callback  = function(value)
-			_G.Auto_Farm_Fish_Tail = value
-			_G.Settings.Auto_Farm_Fish_Tail = value
-			saveSettings()
-			StopTween(_G.Auto_Farm_Fish_Tail)
-		end
-	}
-
-	spawn(function()
-		game:GetService("RunService").Heartbeat:Connect(function()
-			pcall(function()
-				for i,v in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
-					if _G.Auto_Farm_Fish_Tail and StartMagnetFishTailMon and (v.Name == "Fishman Warrior [Lv. 375]" or v.Name == "Fishman Commando [Lv. 400]") and (v.HumanoidRootPart.Position - PosMonFishTail.Position).magnitude <= 350 then
-						v.HumanoidRootPart.CFrame = PosMonFishTail
-						v.HumanoidRootPart.CanCollide = false
-						v.HumanoidRootPart.Size = Vector3.new(50,50,50)
-						if v.Humanoid:FindFirstChild("Animator") then
-							v.Humanoid.Animator:Destroy()
-						end
-						sethiddenproperty(game.Players.LocalPlayer, "SimulationRadius",  math.huge)
-					end
-				end
-			end)
-		end)
-	end)
-
-	spawn(function()
-		while wait() do
-			if _G.Auto_Farm_Fish_Tail and World1 then
-				pcall(function()
-					if game:GetService("Workspace").Enemies:FindFirstChild("Fishman Warrior [Lv. 375]") or game:GetService("Workspace").Enemies:FindFirstChild("Fishman Commando [Lv. 400]") then
-						for i,v in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
-							if v.Name == "Fishman Warrior [Lv. 375]" or v.Name == "Fishman Commando [Lv. 400]" then
-								if v.Humanoid.Health > 0 then
-									repeat wait()
-										AutoHaki()
-										EquipWeapon(_G.Select_Weapon)
-										StartMagnetFishTailMon = true
-										v.HumanoidRootPart.CanCollide = false
-										v.HumanoidRootPart.Size = Vector3.new(60, 60, 60)
-										PosMonFishTail = v.HumanoidRootPart.CFrame
-										getgenv().ToTarget(v.HumanoidRootPart.CFrame * CFrame.new(0,_G.Select_Distance,0))
-										game:GetService'VirtualUser':CaptureController()
-										game:GetService'VirtualUser':Button1Down(Vector2.new(1280, 672))
-									until _G.Auto_Farm_Fish_Tail == false or not v.Parent or v.Humanoid.Health <= 0
-								end
-							end
-						end
-					else
-						StartMagnetFishTailMon = false
-						local Distance = (Vector3.new(904.4072265625, 181.05767822266, 33341.38671875) - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude
-						if Distance > 20000 then
-							game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("requestEntrance",Vector3.new(61163.8515625, 11.6796875, 1819.7841796875))
-						end
-						for i,v in pairs(game:GetService("ReplicatedStorage"):GetChildren()) do 
-							if v.Name == "Fishman Warrior [Lv. 375]" then
-								getgenv().ToTarget(v.HumanoidRootPart.CFrame * CFrame.new(0,_G.Select_Distance,0))
-							elseif v.Name == "Fishman Commando [Lv. 400]" then
-								getgenv().ToTarget(v.HumanoidRootPart.CFrame * CFrame.new(0,_G.Select_Distance,0))
-							end
-						end
-					end
-				end)
-			end
-		end
-	end)
-
 --- OtherSection ---
 
 	OtherSection:AddToggle{
-		Name = "Auto Bartilo Quest [World2]",
+		Name = "Auto Bartilo Quest",
 		Value = _G.Settings.Auto_Bartilo_Quest,
 		Callback  = function(value)
 			_G.Auto_Bartilo_Quest = value
@@ -11159,7 +11092,7 @@ local OtherSection = General:CreateSection({
 	end)
 
 	OtherSection:AddToggle{
-		Name = "Auto Rengoku [World2]",
+		Name = "Auto Rengoku",
 		Value = _G.Settings.Auto_Rengoku,
 		Callback  = function(value)
 			_G.Auto_Rengoku = value
@@ -11389,7 +11322,7 @@ SettingsSection:AddButton({
 
 SettingsSection:AddDropdown({
     Name = "Select Mode Farm",
-	Value = "Normal Mode",
+	Value = _G.Settings.Select_Mode_Farm,
     List = {"Normal Mode","Fast Mode","No Quest"},
     Callback = function(value)
         _G.Select_Mode_Farm = value
@@ -11541,8 +11474,8 @@ SettingsSection:AddSlider({
     Value = _G.Settings.Select_Level_to_Redeem_All_Code,
     Min = 1,
     Max = 2300,
-    Textbox = true,
-    Format = function(value)
+	Format = "CodeSlider : %s%%",
+    Callback = function(value)
 		_G.Select_Level_to_Redeem_All_Code = value
 		_G.Settings.Select_Level_to_Redeem_All_Code = value
 		saveSettings()
@@ -11781,23 +11714,23 @@ spawn(function()
 		end
 	end
 end)
---- ItemsLeft ---
+--- Shop Section ---
 
 local Items = BF:CreateTab({
     Name = "Items"
 })
 
-local ItemsLeft = Items:CreateSection({
+local ShopSection = Items:CreateSection({
     Name = "「Shop」",
     Side = "Left"
 })
--- Abilities
+--- Abilities ---
 
-local Abilities = ItemsLeft:AddLabel({
+local Abilities = ShopSection:AddLabel({
     Name = "Abilities"
 })
 
-ItemsLeft:AddButton({
+ShopSection:AddButton({
     Name = "Skyjump:$10,000",
     Callback = function()
         local args = {
@@ -11808,7 +11741,7 @@ ItemsLeft:AddButton({
     end
 })
 
-ItemsLeft:AddButton({
+ShopSection:AddButton({
     Name = "Buso Haki:$25,000",
     Callback = function()
         local args = {
@@ -11819,7 +11752,7 @@ ItemsLeft:AddButton({
     end
 })
 
-ItemsLeft:AddButton({
+ShopSection:AddButton({
     Name = "Observation haki:$750,000",
     Callback = function()
         local args = {
@@ -11830,7 +11763,7 @@ ItemsLeft:AddButton({
     end
 })
 
-ItemsLeft:AddButton({
+ShopSection:AddButton({
     Name = "Soru:$100,000",
     Callback = function()
         local args = {
@@ -11841,13 +11774,13 @@ ItemsLeft:AddButton({
     end
 })
 
--- Race
+--- Race ---
 
-local Abilities = ItemsLeft:AddLabel({
+local Abilities = ShopSection:AddLabel({
     Name = "Race"
 })
 
-ItemsLeft:AddButton({
+ShopSection:AddButton({
     Name = "Reset Stats:2.5k Fragments",
     Callback = function()
 		local args = {
@@ -11859,7 +11792,7 @@ ItemsLeft:AddButton({
     end
 })
 
-ItemsLeft:AddButton({
+ShopSection:AddButton({
     Name = "Random Race:3K Fragments",
     Callback = function()
         local args = {
@@ -11871,7 +11804,7 @@ ItemsLeft:AddButton({
     end
 })
 
-ItemsLeft:AddButton({
+ShopSection:AddButton({
     Name = "Race Cyborg:2.5k Fragments",
     Callback = function()
 		local args = {
@@ -11882,7 +11815,7 @@ ItemsLeft:AddButton({
     end
 })
 
-ItemsLeft:AddButton({
+ShopSection:AddButton({
     Name = "Race Ghoul:100 Ectoplasm",
     Callback = function()
         local args = {
@@ -11900,13 +11833,13 @@ ItemsLeft:AddButton({
 	end
 })
 
--- Fighting Style
+--- Fighting Style ---
 
-local FightingStyle = ItemsLeft:AddLabel({
+local FightingStyle = ShopSection:AddLabel({
     Name = "Fighting Style"
 })
 
-ItemsLeft:AddButton({
+ShopSection:AddButton({
     Name = "Black Leg",
     Callback = function()
         local args = {
@@ -11916,7 +11849,7 @@ ItemsLeft:AddButton({
     end
 })
 
-ItemsLeft:AddButton({
+ShopSection:AddButton({
     Name = "Electro",
     Callback = function()
         local args = {
@@ -11926,7 +11859,7 @@ ItemsLeft:AddButton({
     end
 })
 
-ItemsLeft:AddButton({
+ShopSection:AddButton({
     Name = "Fishman Karate",
     Callback = function()
         local args = {
@@ -11936,7 +11869,7 @@ ItemsLeft:AddButton({
     end
 })
 
-ItemsLeft:AddButton({
+ShopSection:AddButton({
     Name = "Dragon Claw",
     Callback = function()
         local args = {
@@ -11948,7 +11881,7 @@ ItemsLeft:AddButton({
     end
 })
 
-ItemsLeft:AddButton({
+ShopSection:AddButton({
     Name = "Superhuman",
     Callback = function()
         local args = {
@@ -11959,7 +11892,7 @@ ItemsLeft:AddButton({
     end
 })
 
-ItemsLeft:AddButton({
+ShopSection:AddButton({
     Name = "Death Step",
     Callback = function()
         local args = {
@@ -11969,7 +11902,7 @@ ItemsLeft:AddButton({
     end
 })
 
-ItemsLeft:AddButton({
+ShopSection:AddButton({
     Name = "Sharkman Karate",
     Callback = function()
         local args = {
@@ -11984,7 +11917,7 @@ ItemsLeft:AddButton({
     end
 })
 
-ItemsLeft:AddButton({
+ShopSection:AddButton({
     Name = "Electric Claw",
     Callback = function()
         local string_1 = "BuyElectricClaw";
@@ -11993,7 +11926,7 @@ ItemsLeft:AddButton({
     end
 })
 
-ItemsLeft:AddButton({
+ShopSection:AddButton({
     Name = "Dragon Talon",
     Callback = function()
         local string_1 = "BuyDragonTalon";
@@ -12006,7 +11939,7 @@ ItemsLeft:AddButton({
     end
 })
 
-ItemsLeft:AddButton({
+ShopSection:AddButton({
     Name = "Godhuman",
     Callback = function()
         local args = {
@@ -12016,12 +11949,12 @@ ItemsLeft:AddButton({
     end
 })
 
--- Sword
-local Sword = ItemsLeft:AddLabel({
+--- Sword ---
+local Sword = ShopSection:AddLabel({
     Name = "Cutlass"
 })
 
-ItemsLeft:AddButton({
+ShopSection:AddButton({
     Name = "Skyjump:$1,000",
     Callback = function()
 		local args = {
@@ -12032,7 +11965,7 @@ ItemsLeft:AddButton({
     end
 })
 
-ItemsLeft:AddButton({
+ShopSection:AddButton({
     Name = "Dual Katana:$12,000",
     Callback = function()
         local args = {
@@ -12043,7 +11976,7 @@ ItemsLeft:AddButton({
     end
 })
 
-ItemsLeft:AddButton({
+ShopSection:AddButton({
     Name = "Iron Mace:$25,000",
     Callback = function()
         local args = {
@@ -12054,7 +11987,7 @@ ItemsLeft:AddButton({
     end
 })
 
-ItemsLeft:AddButton({
+ShopSection:AddButton({
     Name = "Triple Katana:$60,000",
     Callback = function()
         local args = {
@@ -12065,7 +11998,7 @@ ItemsLeft:AddButton({
     end
 })
 
-ItemsLeft:AddButton({
+ShopSection:AddButton({
     Name = "Pipe:$100,000",
     Callback = function()
         local args = {
@@ -12076,7 +12009,7 @@ ItemsLeft:AddButton({
     end
 })
 
-ItemsLeft:AddButton({
+ShopSection:AddButton({
     Name = "Soul Cane:$750,000",
     Callback = function()
         local args = {
@@ -12087,7 +12020,7 @@ ItemsLeft:AddButton({
     end
 })
 
-ItemsLeft:AddButton({
+ShopSection:AddButton({
     Name = "Dual-Headed Blade:$400,000",
     Callback = function()
         local args = {
@@ -12098,7 +12031,7 @@ ItemsLeft:AddButton({
     end
 })
 
-ItemsLeft:AddButton({
+ShopSection:AddButton({
     Name = "Bisento:$1,200,000",
     Callback = function()
         local args = {
@@ -12109,19 +12042,19 @@ ItemsLeft:AddButton({
     end
 })
 
-ItemsLeft:AddButton({
+ShopSection:AddButton({
     Name = "Pole v.2:$5,000",
     Callback = function()
         game.ReplicatedStorage.Remotes.CommF_:InvokeServer("ThunderGodTalk")
     end
 })
 
--- Gun
-local Gun = ItemsLeft:AddLabel({
+--- Gun ---
+local Gun = ShopSection:AddLabel({
     Name = "Gun"
 })
 
-ItemsLeft:AddButton({
+ShopSection:AddButton({
     Name = "Slingshot:$5,000",
     Callback = function()
         local args = {
@@ -12132,7 +12065,7 @@ ItemsLeft:AddButton({
     end
 })
 
-ItemsLeft:AddButton({
+ShopSection:AddButton({
     Name = "Musket:$8,000",
     Callback = function()
         local args = {
@@ -12143,7 +12076,7 @@ ItemsLeft:AddButton({
     end
 })
 
-ItemsLeft:AddButton({
+ShopSection:AddButton({
     Name = "Flintlock:$10,500",
     Callback = function()
         local args = {
@@ -12154,7 +12087,7 @@ ItemsLeft:AddButton({
     end
 })
 
-ItemsLeft:AddButton({
+ShopSection:AddButton({
     Name = "Refined Slingshot:$30,000",
     Callback = function()
         local args = {
@@ -12165,7 +12098,7 @@ ItemsLeft:AddButton({
     end
 })
 
-ItemsLeft:AddButton({
+ShopSection:AddButton({
     Name = "Refined Flintlock:$65,000",
     Callback = function()
         local args = {
@@ -12176,18 +12109,18 @@ ItemsLeft:AddButton({
     end
 })
 
-ItemsLeft:AddButton({
+ShopSection:AddButton({
     Name = "Kabucha:1,500 Fragments",
     Callback = function()
 		game.ReplicatedStorage.Remotes.CommF_:InvokeServer("BlackbeardReward", "Slingshot", "2")
     end
 })
 
-local Accessories = ItemsLeft:AddLabel({
+local Accessories = ShopSection:AddLabel({
     Name = "Accessories"
 })
 
-ItemsLeft:AddButton({
+ShopSection:AddButton({
     Name = "Black Cape:$50,000",
     Callback = function()
 		local args = {
@@ -12198,7 +12131,7 @@ ItemsLeft:AddButton({
     end
 })
 
-ItemsLeft:AddButton({
+ShopSection:AddButton({
     Name = "Swordsman Hat:$150,000",
     Callback = function()
         local args = {
@@ -12209,7 +12142,7 @@ ItemsLeft:AddButton({
     end
 })
 
-ItemsLeft:AddButton({
+ShopSection:AddButton({
     Name = "Tomoe Ring:$500,000",
     Callback = function()
         local args = {
@@ -12220,7 +12153,7 @@ ItemsLeft:AddButton({
     end
 })
 
---- ItemsRight ---
+--- World Section ---
 local WorldSection = Items:CreateSection({
     Name = "「World」",
     Side = "Right"
@@ -12230,7 +12163,7 @@ WorldSection:AddButton({
     Name = "Teleport To Sea 1",
     Callback = function()
         local args = {
-			[1] = "TravelMain" -- OLD WORLD to NEW WORLD
+			[1] = "TravelMain"
 		}
 		game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer(unpack(args))
     end
@@ -12239,7 +12172,7 @@ WorldSection:AddButton({
     Name = "Teleport To Sea 2",
     Callback = function()
         local args = {
-			[1] = "TravelDressrosa" -- NEW WORLD to OLD WORLD
+			[1] = "TravelDressrosa"
 		}
 		game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer(unpack(args))
     end
@@ -12248,7 +12181,7 @@ WorldSection:AddButton({
     Name = "Teleport To Sea 3",
     Callback = function()
         local args = {
-			[1] = "TravelZou" -- OLD WORLD to NEW WORLD
+			[1] = "TravelZou"
 		}
 		game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer(unpack(args))
     end
@@ -12261,7 +12194,6 @@ local IslandSection = Items:CreateSection({
 
 if World1 then
 	Island = {
-		"nil",
 		"WindMill",
 		"Marine",
 		"Middle Town",
@@ -12283,7 +12215,6 @@ if World1 then
 		}
 elseif World2 then  
 	Island = {
-		"nil",
 		"The Cafe",
 		"Frist Spot",
 		"Dark Area",
@@ -12303,7 +12234,6 @@ elseif World2 then
 		}
 else
 	Island = {
-		"nil",
 		"Mansion",
 		"Port Town",
 		"Great Tree",
@@ -12317,7 +12247,7 @@ else
 		"Cake Island"
 		}	
 end
-ItemList = {"Mansion","cvxv"}
+
 IslandSection:AddDropdown({
 	Name = "Select Island",
 	Value = _G.Settings.Select_Island,
@@ -12434,12 +12364,12 @@ IslandSection:AddToggle({
 		StopTween(_G.Start_Tween_Island)
     end
 })
--- Esp
-local ItemsRight = Items:CreateSection({
+--- Esp Section --- แก้ไข
+local EspSection = Items:CreateSection({
     Name = "「Esp」",
     Side = "Right"
 })
--- Esp
+
 function isnil(thing)
 	return (thing == nil)
 end
@@ -12609,7 +12539,7 @@ function UpdateFlowerChams()
 		end)
 	end
 end
-ItemsRight:AddToggle({
+EspSection:AddToggle({
     Name = "Esp Players",
 	Value = _G.espplyer,
     Callback = function(value)
@@ -12617,14 +12547,14 @@ ItemsRight:AddToggle({
 	UpdatePlayerChams()
     end
 })
-ItemsRight:AddToggle({
+EspSection:AddToggle({
     Name = "Esp Island",
 	Value = _G.ConfigToggle,
     Callback = function(value)
         _G.ConfigToggle = value
     end
 })
-ItemsRight:AddToggle({
+EspSection:AddToggle({
     Name = "Esp Chest",
 	Value = _G.espchest,
     Callback = function(value)
@@ -12632,7 +12562,7 @@ ItemsRight:AddToggle({
 	UpdatePlayerChams()
     end
 })
-ItemsRight:AddToggle({
+EspSection:AddToggle({
     Name = "Esp Flowers",
 	Value = _G.espflower,
     Callback = function(value)
@@ -12640,19 +12570,12 @@ ItemsRight:AddToggle({
 	UpdatePlayerChams()
     end
 })
-ItemsRight:AddToggle({
+EspSection:AddToggle({
     Name = "Esp Devil Fruits",
 	Value = _G.espdevilfruit,
     Callback = function(value)
         _G.DevilFruitESP = value  
 	UpdatePlayerChams()
-    end
-})
-ItemsRight:AddToggle({
-    Name = "Esp Yama Monter Quest",
-	Value = _G.ConfigToggle,
-    Callback = function(value)
-        _G.ConfigToggle = value
     end
 })
 
@@ -12874,16 +12797,16 @@ spawn(function()
 end)
 
 -- BoostRight
-local Players = Combat:CreateSection({
+local PlayersSection = Combat:CreateSection({
     Name = "「Boost」",
     Side = "Right"
 })
 -- Movement
-local LabelPlayers = Players:AddLabel({
+local LabelPlayers = PlayersSection:AddLabel({
     Name = "Movement"
 })
 
-Players:AddToggle({
+PlayersSection:AddToggle({
     Name = "Inf Ability",
 	Value = _G.Settings.Infinit_Ability,
     Callback = function(value)
@@ -12893,7 +12816,7 @@ Players:AddToggle({
     end
 })
 
-Players:AddToggle({
+PlayersSection:AddToggle({
     Name = "Inf Stamina",
 	Value = _G.Settings.Infinit_Energy,
     Callback = function(value)
@@ -12904,11 +12827,11 @@ Players:AddToggle({
     end
 })
 -- Boost
-local LabelPlayers = Players:AddLabel({
+local LabelNo_Cooldown = PlayersSection:AddLabel({
     Name = "No Cooldown"
 })
 
-Players:AddToggle({
+PlayersSection:AddToggle({
     Name = "No Dodge Cooldown",
 	Value = _G.Settings.Dodge_No_CoolDown,
     Callback = function(value)
@@ -12919,7 +12842,7 @@ Players:AddToggle({
     end
 })
 
-Players:AddToggle({
+PlayersSection:AddToggle({
     Name = "No Geppo Cooldown",
 	Value = _G.Settings.Infinit_SkyJump,
     Callbac = function(value)
@@ -12930,7 +12853,7 @@ Players:AddToggle({
     end
 })
 
-Players:AddToggle({
+PlayersSection:AddToggle({
     Name = "No Soru Cooldown",
 	Value = _G.Settings.Infinit_Soru,
     Callback = function(value)
@@ -12941,11 +12864,11 @@ Players:AddToggle({
     end
 })
 
-local LabelPlayers = Players:AddLabel({
+local LabelCharacter = PlayersSection:AddLabel({
     Name = "Character"
 })
 
-Players:AddToggle({
+PlayersSection:AddToggle({
     Name = "Ctrl Click TP",
 	Value = _G.ConfigToggle,
     Callback = function(value)
@@ -12953,7 +12876,7 @@ Players:AddToggle({
     end
 })
 
-Players:AddToggle({
+PlayersSection:AddToggle({
     Name = "No Clip",
 	Value = _G.Settings.No_clip,
     Callback = function(value)
@@ -12977,7 +12900,7 @@ spawn(function()
     end)
 end)
 
-Players:AddToggle({
+PlayersSection:AddToggle({
     Name = "Walk On Water",
 	Value = _G.ConfigToggle,
     Callback = function(value)
