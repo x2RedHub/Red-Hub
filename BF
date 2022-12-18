@@ -1,7 +1,6 @@
 --- Red Hub:BloxFruit Beta
 
-_G.Fast_Attack  = true
-_G.Select_Bring_Mob_Mode = "Super Bring Mob"
+_G.Bring_Mob = true
 _G.Select_Distance =  "43"
 
 game.StarterGui:SetCore("SendNotification", {
@@ -47,8 +46,8 @@ _G.Settings = {
 	Auto_Quest_Boss = true;
 	Auto_Farm_All_Boss = false;
 	Select_Health = 20;
-    Select_Mode_Farm = "Fast Mode";
-    Super_Fast_Attack = true;
+    Select_Mode_Farm = "Normal Mode";
+    Fast_Attack = true;
 	Auto_Set_Spawn = true;
 	Select_Level_to_Redeem_All_Code = 1;
 	Auto_Redeem_All_Code = false;
@@ -115,7 +114,7 @@ _G.Settings = {
 	Auto_Stats_Sword = false;
 	Auto_Stats_Gun = false;
 	Auto_Stats_Devil_Fruit = false;
-	Point = 1;
+	PointStats = "1";
 	No_clip = false;
 	Infinit_Energy = false;
 	Dodge_No_CoolDown = false;
@@ -8667,7 +8666,7 @@ MainSection:AddToggle({
 spawn(function()
     game:GetService("RunService").Heartbeat:Connect(function() CheckQuest()
 		pcall(function()
-			if _G.Select_Bring_Mob_Mode == "Super Bring Mob" then
+			if _G.Bring_Mob then
 				for i,v in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
 					if _G.Auto_Farm_Level and StartMagnet and v.Name ~= "Ice Admiral [Lv. 700] [Boss]" and v.Name ~= "Don Swan [Lv. 3000] [Boss]" and v.Name ~= "Saber Expert [Lv. 200] [Boss]" and v.Name ~= "Longma [Lv. 2000] [Boss]" and (v.HumanoidRootPart.Position - PosMon.Position).magnitude <= 350 then
 						v.HumanoidRootPart.CFrame = PosMon
@@ -8720,10 +8719,63 @@ spawn(function()
     end)
 end)
 
+
 spawn(function()
     while wait() do
         if _G.Auto_Farm_Level then
-			if _G.Select_Mode_Farm == "Fast Mode" then
+			if _G.Select_Mode_Farm == "Normal Mode" then
+				pcall(function()
+					if not string.find(game:GetService("Players").LocalPlayer.PlayerGui.Main.Quest.Container.QuestTitle.Title.Text, NameMon) then
+						StartMagnet = false
+						game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("AbandonQuest")
+					end
+					if game:GetService("Players").LocalPlayer.PlayerGui.Main.Quest.Visible == false then
+						StartMagnet = false
+						CheckQuest()
+						repeat wait() getgenv().ToTarget(CFrameQuest) until (CFrameQuest.Position - game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position).Magnitude <= 3 or not _G.Auto_Farm_Level
+						if (CFrameQuest.Position - game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position).Magnitude <= 3 then
+							wait(1.2)
+							game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("StartQuest",NameQuest,LevelQuest)
+							wait(0.5)
+						end
+					elseif game:GetService("Players").LocalPlayer.PlayerGui.Main.Quest.Visible == true then
+						CheckQuest()
+						if game:GetService("Workspace").Enemies:FindFirstChild(Ms) then
+							for i,v in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
+								if v:FindFirstChild("HumanoidRootPart") and v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 then
+									if v.Name == Ms then
+										repeat wait()
+											if string.find(game:GetService("Players").LocalPlayer.PlayerGui.Main.Quest.Container.QuestTitle.Title.Text, NameMon) then
+												EquipWeapon(_G.Select_Weapon)
+												AutoHaki()
+												PosMon = v.HumanoidRootPart.CFrame
+												v.HumanoidRootPart.CanCollide = false
+												v.Humanoid.WalkSpeed = 0
+												v.Head.CanCollide = false
+												v.HumanoidRootPart.Size = Vector3.new(50,50,50)
+												StartMagnet = true
+												getgenv().ToTarget(v.HumanoidRootPart.CFrame * CFrame.new(0,_G.Select_Distance,0))
+												game:GetService'VirtualUser':CaptureController()
+												game:GetService'VirtualUser':Button1Down(Vector2.new(1280, 672))
+											else
+												StartMagnet = false
+												game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("AbandonQuest")
+											end
+										until not _G.Auto_Farm_Level or v.Humanoid.Health <= 0 or not v.Parent or game:GetService("Players").LocalPlayer.PlayerGui.Main.Quest.Visible == false
+									end
+								end
+							end
+						else
+							StartMagnet = false
+							if game:GetService("ReplicatedStorage"):FindFirstChild(Ms) then
+								getgenv().ToTarget(game:GetService("ReplicatedStorage"):FindFirstChild(Ms).HumanoidRootPart.CFrame * CFrame.new(0,20,0))
+							else	
+								getgenv().ToTarget(CFrameMon)
+							end
+						end
+					end
+				end)
+			elseif _G.Select_Mode_Farm == "Fast Mode" then
 				pcall(function()
 					if game:GetService("Players").LocalPlayer.Data.SpawnPoint.Value == SPAWNPOINT then
 						if not string.find(game:GetService("Players").LocalPlayer.PlayerGui.Main.Quest.Container.QuestTitle.Title.Text, NameMon) then
@@ -11337,8 +11389,8 @@ SettingsSection:AddButton({
 
 SettingsSection:AddDropdown({
     Name = "Select Mode Farm",
-	Value = "Fast Mode",
-    List = {"Fast Mode","No Quest"},
+	Value = "Normal Mode",
+    List = {"Normal Mode","Fast Mode","No Quest"},
     Callback = function(value)
         _G.Select_Mode_Farm = value
 		_G.Settings.Select_Mode_Farm = value
@@ -11349,10 +11401,10 @@ SettingsSection:AddDropdown({
 
 SettingsSection:AddToggle{
     Name = "Fast Attack",
-    Value = _G.Settings.Super_Fast_Attack,
+    Value = _G.Settings.Fast_Attack,
     Callback  = function(value)
-        _G.Super_Fast_Attack = value
-        _G.Settings.Super_Fast_Attack = value
+        _G.Fast_Attack = value
+        _G.Settings.Fast_Attack = value
         saveSettings()
     end
 }
@@ -11390,7 +11442,7 @@ end
 
 spawn(function()
 	while task.wait() do
-        if _G.Super_Fast_Attack then
+        if _G.Fast_Attack then
 			pcall(function()
 				wait(0.1)
 				local AC = CbFw2.activeController
