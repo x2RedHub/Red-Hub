@@ -11623,9 +11623,9 @@ local StatsSection = General:CreateSection({
 })
 StatsSection:AddToggle({
     Name = "Melee",
-	Value = _G.Melee,
+	Value = _G.Settings.Auto_Stats_Melee,
     Callback = function(value)
-        _G.Melee= value
+        _G.Melee = value
 		_G.Settings.Auto_Stats_Melee = value
         saveSettings()
     end
@@ -11633,40 +11633,40 @@ StatsSection:AddToggle({
 
 StatsSection:AddToggle({
     Name = "Defense",
-	Value = _G.Defense,
+	Value = _G.Settings.Auto_Stats_Defense,
     Callback = function(value)
         _G.Defense = value
-		_G.Settings.Auto_Stats_Melee = value
+		_G.Settings.Auto_Stats_Defense = value
         saveSettings()
     end
 })
 
 StatsSection:AddToggle({
     Name = "Sword",
-	Value = _G.sword,
+	Value = _G.Settings.Auto_Stats_Sword,
     Callback = function(value)
         _G.Sword = value
-		_G.Settings.Auto_Stats_Melee = value
+		_G.Settings.Auto_Stats_Sword = value
         saveSettings()
     end
 })
 
 StatsSection:AddToggle({
     Name = "Gun",
-	Value = _G.gun,
+	Value = _G.Settings.Auto_Stats_Gun,
     Callback = function(value)
         _G.Gun = value
-		_G.Settings.Auto_Stats_Melee = value
+		_G.Settings.Auto_Stats_Gun = value
         saveSettings()
     end
 })
 
 StatsSection:AddToggle({
     Name = "Demon Fruit",
-	Value = _G.demonfruit,
+	Value = _G.Settings.Auto_Stats_Devil_Fruit,
     Callback = function(value)
         _G.Demonfruit = value
-		_G.Settings.Auto_Stats_Melee = value
+		_G.Settings.Auto_Stats_Devil_Fruit = value
         saveSettings()
     end
 })
