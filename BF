@@ -11849,6 +11849,51 @@ ShopSection:AddButton({
 	end
 })
 
+--- Candy ---
+
+local Candy = ShopSection:AddLabel({
+    Name = "Candy"
+})
+
+ShopSection:AddButton({
+    Name = "2x EXP(15 min)",
+	Callback = function()
+	local args = {
+		[1] = "Candies",
+		[2] = "Buy",
+		[3] = 1,
+		[4] = 1
+	}	
+	game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer(unpack(args))
+    end
+})
+
+ShopSection:AddButton({
+    Name = "Stats Refund",
+    Callback = function()
+		local args = {
+			[1] = "Candies",
+			[2] = "Buy",
+			[3] = 1,
+			[4] = 2
+		}
+		game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer(unpack(args))
+    end
+})
+
+ShopSection:AddButton({
+    Name = "Race Reroll",
+    Callback = function()
+        local args = {
+			[1] = "Candies",
+			[2] = "Buy",
+			[3] = 1,
+			[4] = 3
+		}
+		game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer(unpack(args))
+    end
+})
+
 --- Fighting Style ---
 
 local FightingStyle = ShopSection:AddLabel({
