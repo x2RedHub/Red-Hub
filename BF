@@ -1,7 +1,7 @@
 --- Red Hub:BloxFruit [Beta]
 
 _G.Bring_Mob = true
-_G.Select_Distance =  "40"
+_G.Select_Distance =  "45"
 
 if not game:IsLoaded() then repeat game.Loaded:Wait() until game:IsLoaded() end
 
