@@ -141,7 +141,7 @@ _G.Settings = {
 	Auto_Buy_Law_Chip = false;
 	Auto_Start_Law_Dungeon = false;
 	Auto_Kill_Law = false;
-	Select_Weapon_Law_Raid = nil;
+	_Law_Raid = nil;
 	Select_Devil_Fruit = nil;
 	Auto_Buy_Devil_Fruit = false;
 	Auto_Random_Fruit = false;
@@ -847,7 +847,7 @@ function CheckQuest()
             CFrameQuest = CFrame.new(147.52256774902344, 24.793832778930664, -12775.3583984375)
             CFrameMon = CFrame.new(147.52256774902344, 24.793832778930664, -12775.3583984375)
 			SPAWNPOINT = "Chocolate"
-		elseif MyLevel >= 2375 or _G.Select_Mob_Farm == "Candy Rebel [Lv. 2375]" then
+		elseif MyLevel == 2375 or MyLevel <= 2399 or _G.Select_Mob_Farm == "Candy Rebel [Lv. 2375]" then
             Ms = "Candy Rebel [Lv. 2375]"
             NameQuest = "ChocQuest2"
             LevelQuest = 2
@@ -855,6 +855,22 @@ function CheckQuest()
             CFrameQuest = CFrame.new(147.52256774902344, 24.793832778930664, -12775.3583984375)
             CFrameMon = CFrame.new(147.52256774902344, 24.793832778930664, -12775.3583984375)
 			SPAWNPOINT = "Chocolate"
+		elseif MyLevel == 2400 or MyLevel <= 2424 or _G.Select_Mob_Farm == "Candy Pirate [Lv. 2400]" then
+            Ms = "Candy Pirate [Lv. 2400]"
+            NameQuest = "CandyQuest1"
+            LevelQuest = 1
+            NameMon = "Candy Pirate"
+            CFrameQuest = CFrame.new(-1148.0299072265625, 16.133047103881836, -14444.8330078125)
+            CFrameMon = CFrame.new(-1230.12158203125, 91.34728240966797, -14436.44140625)
+			SPAWNPOINT = "CandyCane"
+		elseif MyLevel >= 2425 or _G.Select_Mob_Farm == "Snow Demon [Lv. 2425]" then
+            Ms = "Snow Demon [Lv. 2425]"
+            NameQuest = "CandyQuest2"
+            LevelQuest = 2
+            NameMon = "Snow Demon"
+            CFrameQuest = CFrame.new(-1148.0299072265625, 16.133047103881836, -14444.8330078125)
+            CFrameMon = CFrame.new(-946.131103515625, 63.004661560058594, -14553.4658203125)
+			SPAWNPOINT = "CandyCane"
 		end
     end
 end
@@ -12244,7 +12260,8 @@ else
 		"Haunted Castle",
 		"Ice Cream Island",
 		"Peanut Island",
-		"Cake Island"
+		"Cake Island",
+		"Candy Cane"
 		}	
 end
 
@@ -12358,6 +12375,8 @@ IslandSection:AddToggle({
 					getgenv().ToTarget(CFrame.new(-2062.7475585938, 50.473892211914, -10232.568359375))
 				elseif _G.Select_Island == "Cake Island" then
 					getgenv().ToTarget(CFrame.new(-1884.7747802734375, 19.327526092529297, -11666.8974609375))
+				elseif _G.Select_Island == "Candy Cane" then
+					getgenv().ToTarget(CFrame.new(-986.505615234375, 11.668516159057617, -14087.5869140625))
 				end
 			until not _G.Start_Tween_Island
 		end
